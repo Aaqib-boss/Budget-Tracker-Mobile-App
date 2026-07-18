@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "easyBOOK",
+    "slug": "easyBOOK",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "backgroundColor": "#0f172a"
+    },
+    "icon": "./assets/icon.png"
+  }
+}
