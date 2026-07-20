@@ -1,16 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-let DEFAULT_API_URL = 'http://192.168.8.180:5000/api'; // Active network IP
-
+let DEFAULT_API_URL = 'https://budget-tracker-mobile-app.onrender.com/api'; // Render backend
 export const getApiUrl = async () => {
   const saved = await AsyncStorage.getItem('budget_api_url');
   return saved || DEFAULT_API_URL;
 };
-
 export const setApiUrl = async (url) => {
   await AsyncStorage.setItem('budget_api_url', url);
 };
-
 const api = {
   async getHeaders() {
     const headers = {
@@ -29,7 +25,6 @@ const api = {
     }
     return headers;
   },
-
   async request(endpoint, options = {}) {
     const baseUrl = await getApiUrl();
     const url = `${baseUrl}${endpoint}`;
@@ -38,29 +33,24 @@ const api = {
     // 6-second custom timeout limit
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 6000);
-
     const config = {
       ...options,
       headers,
       signal: controller.signal,
     };
-
     try {
       const response = await fetch(url, config);
       clearTimeout(timeoutId);
       const text = await response.text();
-
       let data;
       try {
         data = JSON.parse(text);
       } catch {
         data = text;
       }
-
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
-
       return data;
     } catch (err) {
       clearTimeout(timeoutId);
@@ -70,28 +60,23 @@ const api = {
       throw err;
     }
   },
-
   get(endpoint) {
     return this.request(endpoint, { method: 'GET' });
   },
-
   post(endpoint, body) {
     return this.request(endpoint, {
       method: 'POST',
       body: JSON.stringify(body),
     });
   },
-
   put(endpoint, body) {
     return this.request(endpoint, {
       method: 'PUT',
       body: JSON.stringify(body),
     });
   },
-
   delete(endpoint) {
     return this.request(endpoint, { method: 'DELETE' });
   },
 };
-
 export default api;
