@@ -5,6 +5,7 @@ const Budget = require('../models/Budget');
 const Goal = require('../models/Goal');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { sendOTPEmail } = require('../utils/mailer');
 
 // Helper to generate JWT
 const generateToken = (id) => {
@@ -170,10 +171,16 @@ const forgotPassword = async (req, res) => {
     user.resetCodeExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    res.json({ 
-      message: 'Reset verification code generated', 
-      code: code
-    });
+    // Send OTP via email
+    try {
+      await sendOTPEmail(user.email, user.name, code);
+      res.json({ 
+        message: 'Verification code sent to your email'
+      });
+    } catch (emailError) {
+      console.error('Email send error:', emailError);
+      res.status(500).json({ message: 'Failed to send verification email. Please try again.' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
