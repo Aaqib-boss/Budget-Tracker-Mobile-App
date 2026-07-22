@@ -7,7 +7,8 @@ import {
   TouchableOpacity, 
   SafeAreaView, 
   ActivityIndicator,
-  Platform 
+  Platform,
+  StatusBar as RNStatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthProvider, AuthContext } from './context/AuthContext';
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f172a',
+    paddingTop: Platform.OS === 'android' ? (RNStatusBar.currentHeight || 24) : 0,
   },
   loadingContainer: {
     flex: 1,
@@ -167,13 +169,13 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: 'row',
-    height: 70,
+    height: Platform.OS === 'ios' ? 70 : 80,
     backgroundColor: '#0b0f19',
     borderTopWidth: 1,
     borderTopColor: '#1e293b',
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingBottom: Platform.OS === 'ios' ? 12 : 0,
+    paddingBottom: Platform.OS === 'ios' ? 12 : 15,
   },
   tabItem: {
     alignItems: 'center',

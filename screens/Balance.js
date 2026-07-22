@@ -684,6 +684,7 @@ export default function Balance({ isDarkMode, onNavigate, currentTab }) {
         date: new Date(),
         account: transferDest
       });
+      await loadTransactions();
       closeTransferModal();
       Alert.alert('Success', 'Transfer completed successfully');
     } catch (err) {
