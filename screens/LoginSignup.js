@@ -158,7 +158,7 @@ export default function LoginSignup({ isDarkMode, onToggleTheme }) {
       await api.post('/auth/reset-password', {
         email: recoveryEmail,
         code: resetCode,
-        password: newPassword
+        newPassword: newPassword
       });
       showToast('Password reset successful! Please log in.', 'success');
       changeViewMode('login');
